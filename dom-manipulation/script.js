@@ -223,7 +223,7 @@ function syncQuotes(serverQuotes) {
   if (conflictsResolved) {
     saveQuotes();
     populateCategories();
-    showNotification("Quotes updated from server (server took precedence).");
+    showNotification("Quotes synced with server!");
   }
 }
 
