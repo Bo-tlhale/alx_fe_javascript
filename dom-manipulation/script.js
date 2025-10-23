@@ -102,9 +102,11 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
   }
   
+const dropdown = document.getElementById("categoryFilter");
+
 function populateCategories() {
       const categories = ["all", ...new Set(quotes.map(q => q.category))];
-      categorySelect.innerHTML = "";
+      dropdown.innerHTML = "";
       categories.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat;
