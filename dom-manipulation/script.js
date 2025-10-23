@@ -35,7 +35,7 @@ function createAddQuoteForm() {
 		<input id="newQuoteText" type="text" placeholder="Enter a new quote" />
 		<input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
 		<button onclick="addQuote()">Add Quote</button>
-  </div>
+	  </div>
     </form>
   `;
 
@@ -52,6 +52,7 @@ function createAddQuoteForm() {
     if (text && category) {
       const newQuote = { text, category };
       quotes.push(newQuote);
+	  localStorage.setItem("quotes", quotes);
       alert("Quote added successfully!");
 
       // Clear inputs
@@ -74,3 +75,14 @@ window.addEventListener("DOMContentLoaded", () => {
   showRandomQuote();
   createAddQuoteForm();
 });
+
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotes();
+      alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }
