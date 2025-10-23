@@ -160,6 +160,54 @@ async function fetchQuotesFromServer() {
   }
 }
 
+// ============================
+// SERVER SYNC (Two-way)
+// ============================
+
+// Simulated server endpoint
+const SERVER_ENDPOINT = "https://jsonplaceholder.typicode.com/posts";
+const SYNC_INTERVAL = 15000; // 15 seconds
+
+// Fetch new quotes (GET)
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch(SERVER_ENDPOINT);
+    const data = await response.json();
+
+    // Simulate "server quotes"
+    const serverQuotes = data.slice(0, 5).map((item, index) => ({
+      text: item.title,
+      category: ["Motivation", "Life", "Inspiration", "Productivity"][index % 4]
+    }));
+
+    handleServerSync(serverQuotes);
+  } catch (error) {
+    console.error("Error fetching from server:", error);
+  }
+}
+
+// Push local quotes to server (POST)
+async function pushQuotesToServer() {
+  try {
+    const response = await fetch(SERVER_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quotes)
+    });
+
+    if (response.ok) {
+      console.log("✅ Local quotes successfully sent to server");
+      showNotification("Local quotes synced to server.");
+    } else {
+      console.warn("⚠️ Server did not accept data.");
+    }
+  } catch (error) {
+    console.error("Error pushing data to server:", error);
+  }
+}
+
 function handleServerSync(serverQuotes) {
   let conflictsResolved = false;
 
@@ -198,7 +246,10 @@ function showNotification(message) {
 }
 
 // Start periodic sync
-setInterval(fetchQuotesFromServer, SYNC_INTERVAL);
+setInterval(() => {
+  fetchQuotesFromServer();   // Pull new quotes from server
+  pushQuotesToServer();  // Push local quotes to server
+}, SYNC_INTERVAL);
 
 // ============================
 // INITIALIZATION
