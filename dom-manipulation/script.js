@@ -72,6 +72,7 @@ newQuoteButton.addEventListener("click", showRandomQuote);
 
 // Initialize on page load
 window.addEventListener("DOMContentLoaded", () => {
+  localStorage.getItem("quotes"); 
   showRandomQuote();
   createAddQuoteForm();
 });
