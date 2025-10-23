@@ -77,6 +77,20 @@ window.addEventListener("DOMContentLoaded", () => {
   createAddQuoteForm();
 });
 
+ document.getElementById("exportBtn").addEventListener("click", () => {
+      const data = JSON.stringify(quotes, null, 2); // Pretty format JSON
+      const blob = new Blob([data], { type: "application/json" }); // Create a Blob
+      const url = URL.createObjectURL(blob); // Create a temporary download URL
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "quotes.json"; // Filename
+      document.body.appendChild(a);
+      a.click(); // Trigger download
+      document.body.removeChild(a);
+	  
+ });
+
 function importFromJsonFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function(event) {
