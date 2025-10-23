@@ -154,7 +154,7 @@ async function fetchQuotesFromServer() {
       category: ["Motivation", "Life", "Inspiration", "Productivity"][index % 4]
     }));
 
-    handleServerSync(serverQuotes);
+    syncQuotes(serverQuotes);
   } catch (error) {
     console.error("Error fetching from server:", error);
   }
@@ -180,7 +180,7 @@ async function fetchQuotesFromServer() {
       category: ["Motivation", "Life", "Inspiration", "Productivity"][index % 4]
     }));
 
-    handleServerSync(serverQuotes);
+    syncQuotes(serverQuotes);
   } catch (error) {
     console.error("Error fetching from server:", error);
   }
@@ -208,7 +208,7 @@ async function pushQuotesToServer() {
   }
 }
 
-function handleServerSync(serverQuotes) {
+function syncQuotes(serverQuotes) {
   let conflictsResolved = false;
 
   // Conflict resolution: server takes precedence
