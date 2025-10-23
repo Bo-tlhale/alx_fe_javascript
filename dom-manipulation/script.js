@@ -52,7 +52,7 @@ function createAddQuoteForm() {
     if (text && category) {
       const newQuote = { text, category };
       quotes.push(newQuote);
-	  localStorage.setItem("quotes", quotes);
+	  localStorage.setItem("quotes", JSON.stringify(quotes));
       alert("Quote added successfully!");
 
       // Clear inputs
@@ -72,7 +72,7 @@ newQuoteButton.addEventListener("click", showRandomQuote);
 
 // Initialize on page load
 window.addEventListener("DOMContentLoaded", () => {
-  localStorage.getItem("quotes"); 
+  JSON.parse(localStorage.getItem("quotes"));
   showRandomQuote();
   createAddQuoteForm();
 });
@@ -101,3 +101,32 @@ function importFromJsonFile(event) {
     };
     fileReader.readAsText(event.target.files[0]);
   }
+  
+function populateCategories() {
+      const categories = ["all", ...new Set(quotes.map(q => q.category))];
+      categorySelect.innerHTML = "";
+      categories.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat;
+        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+        categorySelect.appendChild(option);
+      });
+
+      // Restore last selected category from localStorage
+      const savedCategory = localStorage.getItem("selectedCategory") || "all";
+      categorySelect.value = savedCategory;
+      filterQuotes();
+    }
+
+    // ----- Filter quotes -----
+    function filterQuotes() {
+      const selectedCategory = categorySelect.value;
+      localStorage.setItem("selectedCategory", selectedCategory);
+
+      if (selectedCategory === "all") {
+        renderQuotes(quotes);
+      } else {
+        const filtered = quotes.filter(q => q.category === selectedCategory);
+        renderQuotes(filtered);
+      }
+    }
